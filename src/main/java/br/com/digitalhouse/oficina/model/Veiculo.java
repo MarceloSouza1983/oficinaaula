@@ -6,9 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
-
-
 @Entity
 @Table(name = "veiculos")
 public class Veiculo {
@@ -22,12 +19,13 @@ public class Veiculo {
 	
 	@Column(length = 30, nullable = false)
 	private String cor;
+	
 	@Column(length = 30, nullable = false)
 	private String modelo;
+	
 	@Column(length = 30, nullable = false)
 	private String marca;
 
-	
 	public Veiculo() {}
 	
 	public Veiculo(Long id, String placa, String cor, String modelo, String marca) {
@@ -102,9 +100,5 @@ public class Veiculo {
 			return false;
 		return true;
 	}
-
-	
-	
-	
 	
 }

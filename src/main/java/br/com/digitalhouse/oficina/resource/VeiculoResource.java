@@ -2,6 +2,7 @@ package br.com.digitalhouse.oficina.resource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -29,9 +31,8 @@ public class VeiculoResource {
 		this.veiculoService = veiculoService;
 	}
 	
-	
 	@PostMapping
-	public ResponseEntity<Void> create( @RequestBody Veiculo veiculo){
+	public ResponseEntity<Void> create(@RequestBody Veiculo veiculo){
 		
 		veiculo = this.veiculoService.create(veiculo);
 		
@@ -41,9 +42,7 @@ public class VeiculoResource {
 				 .buildAndExpand(veiculo.getId())
 				 .toUri();
 		
-		
 		return ResponseEntity.created(uri).build();
-		
 	}
 	
 	@PutMapping("/{id}")
@@ -53,11 +52,9 @@ public class VeiculoResource {
 		this.veiculoService.update(veiculo);
 		
 		return ResponseEntity.noContent().build();
-		
 	}
 	
-	
-	@GetMapping("/{id}")  // /veiculos/3
+	@GetMapping("/{id}")
 	public ResponseEntity<Veiculo> findById(@PathVariable Long id){
 		
 		Veiculo veiculo = this.veiculoService.findById(id);
@@ -65,12 +62,18 @@ public class VeiculoResource {
 		return ResponseEntity.ok(veiculo);
 	}
 	
-	@GetMapping // /veiculos
-	public ResponseEntity<List<Veiculo>> findAll(){
+	@GetMapping
+	public ResponseEntity<List<Veiculo>> findAll(@RequestParam Optional<String> cor){
 		
-		List<Veiculo> veiculos = this.veiculoService.findAll();
+		//List<Veiculo> veiculos = this.veiculoService.findAll();
 		
-		return ResponseEntity.ok(veiculos);
+		//return ResponseEntity.ok(veiculos);
+		
+		if (cor.isPresent()) {
+			return ResponseEntity.ok(this.veiculoService.findByCor(cor.get()));
+		} else {
+			return ResponseEntity.ok(this.veiculoService.findAll());
+		}
 		
 	}
 	
@@ -78,33 +81,6 @@ public class VeiculoResource {
 	public ResponseEntity<Void> delete(@PathVariable Long id){
 		this.veiculoService.deleteById(id);
 		return ResponseEntity.noContent().build();
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	}	
 
 }
